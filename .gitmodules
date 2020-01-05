@@ -7,3 +7,6 @@
 [submodule "dbj--sqlite-yapi"]
 	path = dbj--sqlite-yapi
 	url = https://github.com/dbj-data/dbj--sqlite-yapi.git
+[submodule "dbj--nanolib"]
+	path = dbj--nanolib
+	url = https://github.com/dbj-systems/dbj--nanolib.git
