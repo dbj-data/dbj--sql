@@ -1,3 +1,6 @@
 [submodule "sqlite3"]
 	path = sqlite3
 	url = https://github.com/dbj-data/sqlite3.git
+[submodule "sampling_db"]
+	path = sampling_db
+	url = https://github.com/dbj-data/sampling_db.git
