@@ -4,3 +4,6 @@
 [submodule "sampling_db"]
 	path = sampling_db
 	url = https://github.com/dbj-data/sampling_db.git
+[submodule "dbj--sqlite-yapi"]
+	path = dbj--sqlite-yapi
+	url = https://github.com/dbj-data/dbj--sqlite-yapi.git
