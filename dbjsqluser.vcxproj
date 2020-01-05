@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="dbjsqluser\db_file_path.inc" />
+    <None Include="sampling_db\readme.md" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dbjsqluser\main.cpp" />
