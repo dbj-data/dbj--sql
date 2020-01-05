@@ -40,7 +40,7 @@
 
 #include <future>
 
-#include "../dbj--sqlite/dbj++sql.h"
+#include "../dbj--sqlite-yapi/dbj++sql.h"
 
 // includes dbj_nanolib also
 #include "../dbj--nanolib/dbj++tu.h"

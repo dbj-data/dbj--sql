@@ -1,6 +1,7 @@
-# dbj--sql yapi 
-### 2.5.0
-sqlite3 yet another api for C++17
+# dbj--sql--sampler
+### 3.0.0
+
+Uses dbj--sqlite-yapi sqlite3 yet another api for C++ for SQLITE3
 
 **Please see the readme's in the subfolders bellow.**
 

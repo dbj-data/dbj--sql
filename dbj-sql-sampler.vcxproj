@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{C0B416AE-9F00-4887-A647-A6B65C95A635}</ProjectGuid>
+    <ProjectGuid>{613538A7-BEA8-4FE9-9935-14432DF8C43A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>dbjsqluser</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -82,7 +82,7 @@
       </Command>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>echo #define DBJ_BUILD_TIMESTAMP __DATE__ " " __TIME__  &gt; dbjsqluser/build_time_stamp.inc</Command>
+      <Command>echo #define DBJ_BUILD_TIMESTAMP __DATE__ " " __TIME__  &gt; dbjsqlsampler/build_time_stamp.inc</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Generated build_time_stamp.inc</Message>
@@ -114,33 +114,26 @@
       </Command>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>echo #define DBJ_BUILD_TIMESTAMP __DATE__ " " __TIME__  &gt; dbjsqluser/build_time_stamp.inc</Command>
+      <Command>echo #define DBJ_BUILD_TIMESTAMP __DATE__ " " __TIME__  &gt; dbjsqlsampler/build_time_stamp.inc</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Generated build_time_stamp.inc</Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="dbj--sqlite\dbj++sql.h" />
-    <ClInclude Include="dbj--sqlite\dbj_license.h" />
-    <ClInclude Include="dbj--sqlite\sqlite++.h" />
-    <ClInclude Include="dbj--sqlite\sqlite_valstat.h" />
-    <ClInclude Include="dbjsqluser\common.h" />
-    <ClInclude Include="dbjsqluser\tests\basic_tests.h" />
-    <ClInclude Include="dbjsqluser\tests\easy_udf_sample.h" />
-    <ClInclude Include="dbjsqluser\tests\naked_udf.h" />
-    <ClInclude Include="dbjsqluser\tests\test_db.h" />
-    <ClInclude Include="tests\easy_udf_sample.h" />
-    <ClInclude Include="tests\basic_tests.h" />
-    <ClInclude Include="tests\naked_udf.h" />
-    <ClInclude Include="tests\test_db.h" />
+    <ClInclude Include="dbjsqlsampler\common.h" />
+    <ClInclude Include="dbjsqlsampler\tests\basic_tests.h" />
+    <ClInclude Include="dbjsqlsampler\tests\easy_udf_sample.h" />
+    <ClInclude Include="dbjsqlsampler\tests\naked_udf.h" />
+    <ClInclude Include="dbjsqlsampler\tests\test_db.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="dbjsqluser\db_file_path.inc" />
+    <None Include="dbjsqlsampler\build_time_stamp.inc" />
+    <None Include="dbjsqlsampler\db_file_path.inc" />
     <None Include="sampling_db\readme.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dbjsqluser\main.cpp" />
+    <ClCompile Include="dbjsqlsampler\main.cpp" />
     <ClCompile Include="sqlite3\sqlite3.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
