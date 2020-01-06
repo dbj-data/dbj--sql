@@ -131,7 +131,6 @@
   <ItemGroup>
     <None Include="dbjsqlsampler\build_time_stamp.inc" />
     <None Include="dbjsqlsampler\db_file_path.inc" />
-    <None Include="sampling_db\readme.md" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dbjsqlsampler\main.cpp" />
