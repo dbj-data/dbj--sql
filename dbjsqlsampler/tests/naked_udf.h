@@ -62,10 +62,7 @@ namespace dbj_sql_user {
 		*/
 		auto [db, status] = demo_db();
 		// error
-		if (!db) {
-			DBJ_PRINT_STATUS(status);
-			return; 
-		}
+		DBJ_SQL_VOID_RETURN(*status);
 
 		// db type is optional<reference_wrapper< sql::database >>
 		sql::database const& database = *db;
@@ -79,7 +76,7 @@ namespace dbj_sql_user {
 		/*
 		Instead of query() we shall use the exec() metohod
 		*/
-		sql::print_on_sql_error(database.exec(SQL, native_callback));
+		DBJ_SQL_VOID_RETURN(database.exec(SQL, native_callback));
 
 		DBJ_PRINT("\n\nDone\n\n");
 

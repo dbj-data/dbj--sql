@@ -171,10 +171,7 @@ namespace dbj_sql_user {
 	TU_REGISTER([] {
 
 		auto [ db, status ] = demo_db() ;
-		if (!db ) {
-			DBJ_PRINT_STATUS(status);
-			return; // error
-		}
+		DBJ_SQL_VOID_RETURN(*status);
 
 		// db type is optional<reference_wrapper< sql::database >>
 		sql::database const& database = *db;
@@ -184,7 +181,7 @@ namespace dbj_sql_user {
 		// 	"SELECT word, strlen(word) FROM words WHERE (1 == palindrome(word))"
 		// always returning the db_valstat on error
 		// obviuosly macro afficionados are welcome here
-		DBJ_RETURN_ON_SQL_ERROR(
+		DBJ_SQL_VOID_RETURN(
 			sql::register_dbj_udf
 			 < palindrome /* function we register */	>(
 			 database,  /* to which database */
@@ -192,7 +189,7 @@ namespace dbj_sql_user {
 			)
 		);
 
-		DBJ_RETURN_ON_SQL_ERROR(sql::register_dbj_udf<strlen_udf>(database, "strlen"));
+		DBJ_SQL_VOID_RETURN(sql::register_dbj_udf<strlen_udf>(database, "strlen"));
 
 	// execute the query using the 
 	// standard result processing calback 
@@ -201,7 +198,7 @@ namespace dbj_sql_user {
 	// they are not available in SQLITE3 
 
 		auto SQL = "SELECT Name, strlen(Name) FROM entries WHERE ( 1 == palindrome(Name) )";
-		DBJ_RETURN_ON_SQL_ERROR(
+		DBJ_SQL_VOID_RETURN(
 			database.query(SQL, sql::universal_callback  /* generic dbj::sql result_handler */)
 		);
 

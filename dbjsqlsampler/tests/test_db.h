@@ -8,6 +8,17 @@
 
 #include "..\common.h"
 
+#define DBJ_SQL_CHECK(S_) \
+if (dbj::sql::is_error(S_)) { \
+DBJ_PRINT( DBJ_FG_RED_BOLD "\n\n%s(%d) \n\n DBJ SQL YAPI error status %s\n" DBJ_RESET , __FILE__, __LINE__, dbj::sql::err_message_sql(S_).data() );\
+}
+
+#define DBJ_SQL_VOID_RETURN(S_) \
+if (dbj::sql::is_error(S_)) { \
+DBJ_PRINT(DBJ_FG_RED_BOLD "\n\n%s(%d) \n\n DBJ SQL YAPI error status %s\n\nReturning..." DBJ_RESET, __FILE__, __LINE__, dbj::sql::err_message_sql(S_).data() ); \
+return; \
+}
+
 namespace dbj_sql_user {
 	/*
 	the dbj++sql namespace
@@ -37,8 +48,6 @@ namespace dbj_sql_user {
 		// no throwing from here
 		noexcept
 	{
-		sql::db_valstat demo_db_status;
-
 		constexpr auto DEMO_DB_CREATE_SQL = "DROP TABLE IF EXISTS entries; "
 			"CREATE TABLE entries ( Id int primary key, Name nvarchar(100) not null ); "
 			"INSERT INTO entries values (1, 'LondonodnoL');"
@@ -52,7 +61,7 @@ namespace dbj_sql_user {
 			"INSERT INTO entries values (9, 'Batajnica');";
 		// this lambda is executed only on the first call 
 		auto db_instance_holder = 
-			[](sql::dbj_sql_valstat& sqlite3_status) 
+			[](sql::sqlite_status_code& sqlite3_status)
 			-> std::reference_wrapper<sql::database>
 		{
 			// here we keep the single sql::database type instance
@@ -60,7 +69,7 @@ namespace dbj_sql_user {
 			return db;
 		};
 
-		static sql::db_valstat instance_ 
+		static sql::db_valstat instance_
 			= sql::db_initor(db_instance_holder, DEMO_DB_CREATE_SQL);
 		return instance_ ;
 	} // demo_db
@@ -117,7 +126,7 @@ namespace dbj_sql_user {
 
 		// this lambda is executed only on the first call 
 		auto db_instance_holder =
-			[](sql::dbj_sql_valstat& sqlite3_status)
+			[](sql::sqlite_status_code& sqlite3_status)
 			-> std::reference_wrapper<sql::database>
 		{
 			// here we keep the single sql::database type instance

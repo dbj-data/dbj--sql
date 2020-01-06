@@ -12,7 +12,7 @@ namespace dbj_sql_user
 	we return the db_valstat, and
 	we make sure it is not discarded
 	*/
-	[[nodiscard]] inline sql::dbj_sql_valstat test_wrong_insert(sql::database const& db) noexcept
+	[[nodiscard]] inline sql::sqlite_status_code test_wrong_insert(sql::database const& db) noexcept
 	{
 
 		/*
@@ -61,7 +61,7 @@ namespace dbj_sql_user
 	/*
 	use the universal callback provided by dbj++sqlite
 	*/
-	[[nodiscard]] inline sql::dbj_sql_valstat test_table_info(sql::database const& db) noexcept
+	[[nodiscard]] inline sql::sqlite_status_code test_table_info(sql::database const& db) noexcept
 	{
 		DBJ_PRINT("\nmeta data for columns of the table 'entries'\n");
 		/*
@@ -70,7 +70,7 @@ namespace dbj_sql_user
 		return sql::table_info(db, "entries", sql::universal_callback);
 	}
 
-	[[nodiscard]] inline sql::dbj_sql_valstat test_select(sql::database const& db) noexcept
+	[[nodiscard]] inline sql::sqlite_status_code test_select(sql::database const& db) noexcept
 	{
 		DBJ_PRINT("\nexecute: 'SELECT Id, Name FROM entries'\n");
 		return db.query("SELECT Id,Name FROM entries", sample_callback);
@@ -108,21 +108,21 @@ namespace dbj_sql_user
 	*/
 	TU_REGISTER(
 		[] {
-			sql::dbj_sql_valstat status_{};
+			sql::sqlite_status_code status_{};
 			// we do not need to make the database just obtain its instance
 			// the we do not use sql::db_initor here
 			sql::database db(DICTIONARY_DB_FILE_PATH, status_);
 			// some kind of error has happened
-			if (sql::is_error(status_)) {
-				DBJ_PRINT("\n\n ERROR Status : \n %s\nWhile opening the database: %s\n", status_.second->data(), DICTIONARY_DB_FILE_PATH);
-				return;
-			}
+			DBJ_SQL_VOID_RETURN(status_);
 
 			constexpr auto SQL = "SELECT word, definition FROM entries WHERE word LIKE 'zyga%'";
 			DBJ_PRINT("\n\nExternal database: %s, testing query: %s", db.db_name(), SQL);
+
 			// do not return the status
-			sql::print_on_sql_error(db.query(SQL, example_callback));
+			DBJ_SQL_CHECK((db.query(SQL, example_callback)));
 		});
+
+
 
 	/*
 	Test Unit registration
@@ -130,13 +130,12 @@ namespace dbj_sql_user
 	TU_REGISTER(
 		[] {
 			auto [database, status] = demo_db();
-			if (!database) {
-				DBJ_PRINT_STATUS(status);
-				return; // error
-			}
-			sql::print_on_sql_error(test_wrong_insert(*database));
-			sql::print_on_sql_error(test_table_info(*database));
-			sql::print_on_sql_error(test_select(*database));
+
+			DBJ_SQL_VOID_RETURN(*status);
+
+			DBJ_SQL_CHECK(test_wrong_insert(*database));
+			DBJ_SQL_CHECK(test_table_info(*database));
+			DBJ_SQL_CHECK(test_select(*database));
 
 			/*
 			NOTE: above we just perform "print-and-proceed"
@@ -147,24 +146,21 @@ namespace dbj_sql_user
 	TU_REGISTER(
 		[] {
 
-			DBJ_PRINT("\n\nCreating and querying rezults database.\nRezults of C++ runtime buffer types.\n");
+			DBJ_PRINT("\n\nCreating and querying rezults database.\nRezults of C++ runtime buffer types measurements.\n");
 
-			auto [db, status] = rezults_db();
-			if (!db) {
-				DBJ_PRINT_STATUS(status);
-				return; // error
-			}
+			auto [db, status] = dbj_sql_user::rezults_db();
+			DBJ_SQL_VOID_RETURN(*status);
 
 			// db type is optional<reference_wrapper< sql::database >>
-			sql::database const& database = *db;
+			dbj::sql::database const& database = *db;
 
 			DBJ_PRINT("\nDatabase: %s, meta data for columns of the table 'rezults'\n", database.db_name());
-			sql::print_on_sql_error(sql::table_info(database, "rezults", sql::universal_callback));
+			DBJ_SQL_CHECK(dbj::sql::table_info(database, "rezults", dbj::sql::universal_callback));
 
 			const char* const QRY[]{ "SELECT rank,size, rezult,comment FROM rezults GROUP BY size ORDER BY rank" };
 
 			DBJ_PRINT("\n%s\n", QRY[0]);
-			sql::print_on_sql_error(database.query(QRY[0], sql::universal_callback));
+			DBJ_SQL_CHECK(database.query(QRY[0], dbj::sql::universal_callback));
 
 		});
 
