@@ -121,7 +121,6 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="dbj--nanolib\dbj_valstat.h" />
     <ClInclude Include="dbjsqlsampler\common.h" />
     <ClInclude Include="dbjsqlsampler\tests\basic_tests.h" />
     <ClInclude Include="dbjsqlsampler\tests\easy_udf_sample.h" />
