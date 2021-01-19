@@ -125,7 +125,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="dbj--sqlite\dbj++sql.h" />
-    <ClInclude Include="dbj--sqlite\dbj_license.h" />
     <ClInclude Include="dbj--sqlite\sqlite++.h" />
     <ClInclude Include="dbj--sqlite\sqlite_valstat.h" />
     <ClInclude Include="dbjsqluser\common.h" />

@@ -19,6 +19,8 @@
 #undef DBJ_ERR
 #define DBJ_ERR(...) dbj_log_error(__VA_ARGS__)
 
+#include "sqlite_valstat.h"
+
 namespace dbj::sql
 {
 	using buffer_type = typename dbj::buffer<char>;
@@ -31,11 +33,6 @@ namespace dbj::sql
 
 	constexpr inline auto version = "2.9.0";
 	constexpr inline auto product = "DBJ SQLITE -- (c) 2020/2021 by dbj@dbj.org -- https://dbj.org/license_dbj";
-}
-
-#include "sqlite_valstat.h"
-
-namespace dbj::sql {
 
 	using uchar = unsigned char;
 	using binary_type = typename std::vector< uchar >;
@@ -371,13 +368,14 @@ namespace dbj::sql {
 
 	class database final
 	{
+		using type = database;
 		mutable connection_handle handle{};
 		// aka vector<char>
 		buffer_type::value_type last_opened_db_name{};
 
 		/*
 		this function by design does not return a value
-		just the dbj_sql_valstat<int>
+		but the dbj_sql_valstat<int>
 		*/
 		[[nodiscard]] static dbj_sql_valstat<int>
 			dbj_sqlite_open(connection_handle& handle_, char const* filename)	noexcept
@@ -411,7 +409,7 @@ namespace dbj::sql {
 
 	public:
 		/* default constructor */
-		database()
+		database() noexcept
 		{
 			last_opened_db_name = buffer_type::make("UNOPENED");
 		}
@@ -436,7 +434,7 @@ namespace dbj::sql {
 		}
 
 		// must not free this result
-		char const* db_name() const noexcept {
+		char const* const db_name() const noexcept {
 			return this->last_opened_db_name.data();
 		}
 

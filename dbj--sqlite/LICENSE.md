@@ -1,21 +1,21 @@
-# DBJ--SQLITE YAPI
-### Yet Another API
+# DBJ--SQLITE YAPI&trade;
+Yet Another SQLite API
 
--------------------------------------
+<p>&nbsp;</p>
 
-#### Copyright 2017,2018,2019,2020 by [dbj.systems uk ltd](https://dbj.systems/).
+### &copy; 2017 - 2021 by [dbj.systems uk ltd](https://dbj.systems/).
+### Licence -- https://dbj.org/license_dbj
+<p>&nbsp;</p>
 
-#### Licence -- [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+ Contact
+ 
+ [info@dbj.systems](mailto:info@dbj.systems)
 
----------------------------------------------------------------------  
+ [skype:live:dbj.systems?chat](skype:live:dbj.systems?chat)
 
-> Contact
-> 
-> [info@dbj.systems](mailto:info@dbj.systems)
->
-> [skype:live:dbj.systems?chat](skype:live:dbj.systems?chat)
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 
-
-
-[![dbj();](http://dbj.org/wp-content/uploads/2015/12/cropped-dbj-icon-e1486129719897.jpg)](http://www.dbj.org "dbj")  
+[![dbj();](https://dbj.org/wp-content/uploads/2015/12/cropped-dbj-icon-e1486129719897.jpg)](http://www.dbj.org "dbj")  
 
