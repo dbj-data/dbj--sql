@@ -21,8 +21,7 @@ namespace dbj_sql_user {
 	std::unique_ptr<char[]> is the only other type we could use
 	but it is only slightly faster and not that easy to use
 	*/
-	using buffer = typename dbj::nanolib::v_buffer;
-	using buffer_type = typename buffer::buffer_type;
+	using buffer_type = typename dbj::buffer<char>;
 
 	// extern sqlite db file, to use
 
@@ -37,7 +36,7 @@ namespace dbj_sql_user {
 		// no throwing from here
 		noexcept
 	{
-		sql::db_valstat demo_db_status;
+		// sql::db_valstat demo_db_status;
 
 		constexpr auto DEMO_DB_CREATE_SQL = "DROP TABLE IF EXISTS entries; "
 			"CREATE TABLE entries ( Id int primary key, Name nvarchar(100) not null ); "
@@ -50,9 +49,10 @@ namespace dbj_sql_user {
 			"INSERT INTO entries values (7, 'Pregrevica');"
 			"INSERT INTO entries values (8, 'ZemunumeZ');"
 			"INSERT INTO entries values (9, 'Batajnica');";
+
 		// this lambda is executed only on the first call 
-		auto db_instance_holder = 
-			[](sql::dbj_sql_valstat& sqlite3_status) 
+		auto db_instance_holder =
+			[](sql::dbj_sql_valstat<int>& sqlite3_status)
 			-> std::reference_wrapper<sql::database>
 		{
 			// here we keep the single sql::database type instance
@@ -60,9 +60,9 @@ namespace dbj_sql_user {
 			return db;
 		};
 
-		static sql::db_valstat instance_ 
+		static sql::db_valstat instance_
 			= sql::db_initor(db_instance_holder, DEMO_DB_CREATE_SQL);
-		return instance_ ;
+		return instance_;
 	} // demo_db
 
 	/*
@@ -117,7 +117,7 @@ namespace dbj_sql_user {
 
 		// this lambda is executed only on the first call 
 		auto db_instance_holder =
-			[](sql::dbj_sql_valstat& sqlite3_status)
+			[](sql::dbj_sql_valstat<int>& sqlite3_status)
 			-> std::reference_wrapper<sql::database>
 		{
 			// here we keep the single sql::database type instance

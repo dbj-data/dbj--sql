@@ -12,7 +12,7 @@ namespace dbj_sql_user {
 	An example on how to do native SQLITE UDF on top of dbj++sql
 	while coding in C++17
 
-	using namespace ::sqlite; <-- this is where sqlite3 API lives in dbj++ world 
+	using namespace ::sqlite; <-- this is where sqlite3 API lives in dbj++ world
 	*/
 	using namespace sqlite;
 
@@ -40,9 +40,9 @@ namespace dbj_sql_user {
 	------------------------------------------------------------
 	Test Unit
 	*/
-	TU_REGISTER([] {
+	UTEST(dbjsqlite, whatever) {
 
-		DBJ_PRINT("\n\nUsing SQLITE3 native UDF, with a little help of dbj++sqlite\n\n");
+		DBJ_PRINT("Using SQLITE3 native UDF, with a little help of dbj++sqlite");
 
 		/* can be function or lambda or functor */
 		auto native_callback = [](void* row_, int argc, char** argv, char** col_names)
@@ -54,7 +54,7 @@ namespace dbj_sql_user {
 			auto value = cursor_->to_text(0);
 
 			for (int i = 0; i < argc; ++i)
-				DBJ_PRINT("\n%s = %s", col_names[i], (*value).data());
+				DBJ_PRINT("%s = %s", col_names[i], (*value).data());
 			return SQLITE_OK;
 		};
 		/*
@@ -64,7 +64,7 @@ namespace dbj_sql_user {
 		// error
 		if (!db) {
 			DBJ_PRINT_STATUS(status);
-			return; 
+			return;
 		}
 
 		// db type is optional<reference_wrapper< sql::database >>
@@ -81,9 +81,9 @@ namespace dbj_sql_user {
 		*/
 		sql::print_on_sql_error(database.exec(SQL, native_callback));
 
-		DBJ_PRINT("\n\nDone\n\n");
+		DBJ_PRINT("Done");
 
-		});
+	}
 
 } // pure_udf
 #undef DBJ_CHECK_RETURN

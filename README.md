@@ -1,4 +1,13 @@
 # dbj--sql yapi 
+
+### 2.9.0
+
+Uses [`MACHINE_WIDE`](https://github.com/dbj-data/machine_wide), [dbj](https://github.com/dbj-data/dbj) and [ubut](https://github.com/dbj-data/ubut) (UTEST).
+
+Depends on [dbj_simple_log](https://github.com/dbj-systems/dbj--simplelog) lib.
+
+dbj--nanolib removed
+
 ### 2.5.0
 sqlite3 yet another api for C++17
 
