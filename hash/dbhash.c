@@ -2,7 +2,6 @@
 // https://sqlite.org/forum/forumpost/d90adfbb0a
 /*
 so ...
-303001
 */
 #if SQLITE_VERSION_NUMBER < 3033000
 #define SQLITE_SCHEMA_NAME "sqlite_master"
