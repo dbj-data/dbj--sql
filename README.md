@@ -17,9 +17,9 @@ Hint: Start from the `sampling_db`, then go to `dbjsqluser`.
 
 -------------------------------------
 
-#### Copyright 2017,2018,2019,2020 by [dbj.systems uk ltd](https://dbj.systems/).
+#### &copy; 2017 - 2021 by [dbj.systems uk ltd](https://dbj.systems/).
 
-#### Licence -- [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+#### Licence -- https://dbj.org/license_dbj
 
 ---------------------------------------------------------------------  
 
