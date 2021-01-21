@@ -1,6 +1,12 @@
 /*'
 * transformed from:  https://www.freebasic.net/forum/viewtopic.php?select_statement=14804
 */
+#ifndef _DEBUG
+#ifndef NDEBUG
+ #define NDEBUG
+ #endif
+#endif // _DEBUG
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -26,12 +32,9 @@ static int err_ = 0;
 //TRY(sqlite3_exec(database, text, NULL, NULL, NULL)
 //#endmacro
 
-#define sql(database, text) (TRY(sqlite3_exec(database, text, NULL, NULL, NULL), assert(! is_sqlite_err(err_)))
+#define sql(database, text) (sqlite3_exec(database, text, NULL, NULL, NULL), assert(! is_sqlite_err(err_)))
 
-#define TRY(X) do { \
-int errc = (X) ;\
-assert(! is_sqlite_err(errc) ; \
-} while(0)
+#define TRY(...) do { int errc = (__VA_ARGS__) ; assert(! is_sqlite_err(errc) ) ; } while(0)
 
 // Sub main()
 int main(void)
@@ -59,7 +62,7 @@ int main(void)
 
     srand(clock());
     t1 = clock();
-    TRY(sqlite3_open(":memory:", &dbb));
+    TRY((sqlite3_open(":memory:", &dbb)));
 
     sql(dbb, "BEGIN TRANSACTION;");
     sql(dbb, "CREATE TABLE hash_table(key INTEGER,value INTEGER);");
@@ -67,7 +70,7 @@ int main(void)
     sql(dbb, "COMMIT;");
 
     sql(dbb, "BEGIN TRANSACTION;");
-    TRY(sqlite3_prepare(dbb, insert_statement, strlen(insert_statement), &stmt, NULL);
+    TRY(sqlite3_prepare(dbb, insert_statement, strlen(insert_statement), &stmt, NULL));
 
     for (int i = 0; i < TABLESIZE; ++i)
     {
@@ -84,14 +87,14 @@ int main(void)
 
     printf("\nsqlite insert : %d ", (t2 - t1) / CLOCKS_PER_SEC);
 
-    TRY(sqlite3_prepare(dbb, select_statement, strlen(select_statement), &stmt2, NULL);
+    TRY(sqlite3_prepare(dbb, select_statement, strlen(select_statement), &stmt2, NULL));
     int value = 0;
     t1 = clock();
     for (int i = 0; i < TABLESIZE; ++i)
     {
         TRY(sqlite3_bind_int(stmt2, 1, table[i]));
-        TRY(sqlite3_step(stmt2);
-        value = sqlite3_column_int(stmt2, 0));
+        TRY(sqlite3_step(stmt2));
+        value = sqlite3_column_int(stmt2, 0);
         TRY(sqlite3_reset(stmt2));
     }
     TRY(sqlite3_finalize(stmt2));
