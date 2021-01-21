@@ -3,103 +3,152 @@
 */
 #ifndef _DEBUG
 #ifndef NDEBUG
- #define NDEBUG
- #endif
+#define NDEBUG
+#endif
 #endif // _DEBUG
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
 #include <string.h>
+#include <ubut/ubench.h>
 #include "..\sqlite3\sqlite3.h"
 
-static bool is_sqlite_err(int specimen_)
+static bool is_sqlite_err(const int specimen_)
 {
-return ( 
-    ((specimen_ == SQLITE_OK) || (specimen_ == SQLITE_ROW) || (specimen_ == SQLITE_DONE))
-    ? false 
-    : true 
-    );
+    return (
+        (specimen_ == SQLITE_OK) || (specimen_ == SQLITE_ROW) || (specimen_ == SQLITE_DONE)
+            ? false
+            : true);
 }
 
-enum { TABLESIZE = 5000 } ;
-
-// Shared err_ As Integer
-static int err_ = 0;
-
-//#macro sql(database, text)
-//TRY(sqlite3_exec(database, text, NULL, NULL, NULL)
-//#endmacro
-
-#define sql(database, text) (sqlite3_exec(database, text, NULL, NULL, NULL), assert(! is_sqlite_err(err_)))
-
-#define TRY(...) do { int errc = (__VA_ARGS__) ; assert(! is_sqlite_err(errc) ) ; } while(0)
-
-// Sub main()
-int main(void)
+enum
 {
+    TABLESIZE = 5000
+};
 
-    //Dim As clock_t t1
-    //Dim As clock_t t2
-    clock_t t1, t2;
-
-    //        Dim table(0 To TABLESIZE) As UInteger
-    int table[TABLESIZE] = {0};
-    // Dim As Integer success
-    int success = 0;
-    //    Dim As sqlite3 Ptr dbb
-    sqlite3 *dbb = NULL;
-    //Dim As ZString Ptr insert_statement = @"INSERT INTO hash_table VALUES(?,?)"
-    //Dim As ZString Ptr select_statement = @"SELECT value FROM hash_table WHERE key = ?"
 #define insert_statement "INSERT INTO hash_table VALUES(?,?)"
 #define select_statement "SELECT value FROM hash_table WHERE key = ?"
 
-    //Dim As sqlite3_stmt Ptr stmt
-    //Dim As sqlite3_stmt Ptr stmt2
-    sqlite3_stmt *stmt = NULL;
-    sqlite3_stmt *stmt2 = NULL;
+typedef struct STAT
+{
+    int keys_table[TABLESIZE];
+    sqlite3_stmt *insert_stmt;
+    sqlite3_stmt *select_stmt;
+    int last_err_;
+} STAT;
 
-    srand(clock());
-    t1 = clock();
-    TRY((sqlite3_open(":memory:", &dbb)));
+static STAT stat = {.keys_table = {0}, .insert_stmt = NULL, .select_stmt = NULL, .last_err_ = SQLITE_OK};
+
+// #define sql(database, text) ( stat.last_err_ = sqlite3_exec(database, text, NULL, NULL, NULL), assert(! is_sqlite_err(stat.last_err_)))
+
+#define TRY(EXP_)                                 \
+    do                                            \
+    {                                             \
+        stat.last_err_ = (EXP_);                  \
+        if (is_sqlite_err(stat.last_err_))        \
+        {                                         \
+            puts(_CRT_STRINGIZE(__LINE__));       \
+            puts("sqlite error from: " #EXP_);    \
+            puts(sqlite3_errstr(stat.last_err_)); \
+            perror("system ");                    \
+            exit(0);                              \
+        }                                         \
+    } while (0)
+
+#define sql(database, text) TRY(sqlite3_exec(database, text, NULL, NULL, NULL))
+
+static sqlite3 *init_setup()
+{
+    static sqlite3 *dbb_ = NULL;
+
+    if (dbb_ != NULL)
+        return dbb_;
+
+    sqlite3_open(":memory:", &dbb_);
+
+    sql(dbb_, "BEGIN TRANSACTION;");
+    sql(dbb_, "CREATE TABLE hash_table(key INTEGER,value INTEGER);");
+    sql(dbb_, "CREATE INDEX idx_hashtable ON hash_table(key);");
+    sql(dbb_, "COMMIT;");
+
+    TRY(sqlite3_prepare(dbb_, insert_statement, strlen(insert_statement), &stat.insert_stmt, NULL));
+    TRY(sqlite3_prepare(dbb_, select_statement, strlen(select_statement), &stat.select_stmt, NULL));
+
+    return dbb_;
+}
+
+static void close_and_clean(void)
+{
+    sqlite3 *dbb_ = init_setup();
+    TRY(sqlite3_finalize(stat.insert_stmt));
+    TRY(sqlite3_finalize(stat.select_stmt));
+    TRY(sqlite3_close(dbb_));
+}
+
+static void hash_db_create_populate(void)
+{
+    sqlite3 *dbb = init_setup();
 
     sql(dbb, "BEGIN TRANSACTION;");
-    sql(dbb, "CREATE TABLE hash_table(key INTEGER,value INTEGER);");
-    sql(dbb, "CREATE INDEX idx_hashtable ON hash_table(key);");
-    sql(dbb, "COMMIT;");
-
-    sql(dbb, "BEGIN TRANSACTION;");
-    TRY(sqlite3_prepare(dbb, insert_statement, strlen(insert_statement), &stmt, NULL));
 
     for (int i = 0; i < TABLESIZE; ++i)
     {
-        int key = rand() % 65536;
-        TRY(sqlite3_bind_int(stmt, 1, key));
-        TRY(sqlite3_bind_int(stmt, 2, key + 100));
-        TRY(sqlite3_step(stmt));
-        TRY(sqlite3_reset(stmt));
-        table[i] = key;
+        int key = rand() % TABLESIZE;
+        TRY(sqlite3_bind_int(stat.insert_stmt, 1, key));
+        TRY(sqlite3_bind_int(stat.insert_stmt, 2, key + 100));
+        TRY(sqlite3_step(stat.insert_stmt));
+        TRY(sqlite3_reset(stat.insert_stmt));
+        stat.keys_table[i] = key;
     }
-    TRY(sqlite3_finalize(stmt));
     sql(dbb, "COMMIT;");
-    t2 = clock();
+}
 
-    printf("\nsqlite insert : %d ", (t2 - t1) / CLOCKS_PER_SEC);
-
-    TRY(sqlite3_prepare(dbb, select_statement, strlen(select_statement), &stmt2, NULL));
+static void hash_db_select(void)
+{
+    sqlite3 *dbb = init_setup();
     int value = 0;
-    t1 = clock();
     for (int i = 0; i < TABLESIZE; ++i)
     {
-        TRY(sqlite3_bind_int(stmt2, 1, table[i]));
-        TRY(sqlite3_step(stmt2));
-        value = sqlite3_column_int(stmt2, 0);
-        TRY(sqlite3_reset(stmt2));
+        TRY(sqlite3_bind_int(stat.select_stmt, 1, stat.keys_table[i]));
+        TRY(sqlite3_step(stat.select_stmt));
+        value = sqlite3_column_int(stat.select_stmt, 0);
+        TRY(sqlite3_reset(stat.select_stmt));
     }
-    TRY(sqlite3_finalize(stmt2));
-    TRY(sqlite3_close(dbb));
-    t2 = clock();
-    printf("\nsqlite select : %d ", (t2 - t1) / CLOCKS_PER_SEC);
+}
 
-} // main()
+UBENCH(dbj_sqlite_hash, populate) { hash_db_create_populate(); }
+
+UBENCH(dbj_sqlite_hash, select) { hash_db_select(); }
+
+// approx 7 times slower 
+// vs the  hash_db_create_populate();
+#if 0
+UBENCH(dbj_sqlite_hash, slow_populate)
+{
+    sqlite3 *dbb = init_setup();
+
+    char sql_insert[0xFF] = {0};
+
+    for (int i = 0; i < TABLESIZE; ++i)
+    {
+        int key = rand() % TABLESIZE;
+        snprintf(sql_insert, 0xFF, "INSERT INTO hash_table VALUES(%d,%d)" , key, key + 100);
+        sql(dbb,sql_insert);
+        stat.keys_table[i] = key;
+    }
+}
+#endif // 0
+
+UBENCH(dbj_sqlite_hash, fast_select) { hash_db_select(); }
+
+UBENCH_STATE; // note there is no ()!
+
+int main(int argc, const char *const argv[])
+{
+    int retval = ubench_main(argc, argv);
+    close_and_clean();
+    return retval;
+}
