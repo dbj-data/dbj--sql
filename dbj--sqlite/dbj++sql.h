@@ -424,7 +424,7 @@ namespace dbj::sql
 		{
 			sl_ = dbj_sqlite_open(this->handle, storage_name);
 
-			if (is_error(sl_))
+			if (is_error_valstat(sl_))
 			{
 				last_opened_db_name.clear();
 			}
@@ -483,7 +483,7 @@ namespace dbj::sql
 
 			// return if prepare_statement returnd an error state
 			dbj_sql_valstat<int> status = prepare_statement(query_, statement_);
-			if (is_error(status)) return status; // return on error
+			if (is_error_valstat(status)) return status; // return on error
 
 #ifdef _DEBUG
 			auto col_count_ [[maybe_unused]] = sqlite::sqlite3_column_count(statement_.get());
@@ -539,7 +539,7 @@ namespace dbj::sql
 
 				// return if prepare_statement returnd an error state
 				dbj_sql_valstat<int> status = prepare_statement(sql_, statement_);
-				if (is_error(status)) return status; // return on error
+				if (is_error_valstat(status)) return status; // return on error
 
 				cursor_iterator criter_{ statement_.get() };
 

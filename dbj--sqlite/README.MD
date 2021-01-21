@@ -1,12 +1,8 @@
 
 # dbj++sql 
 
-#### YAPI (Yet Another API)
+#### YAPI&trade; (Yet Another API)
 C++17 SQLITE(3) for the rest of us
-
-What we think is minimal functionality is implemented. For more we hope you can use this lib as the foundation.
-
-Currently ( 2020 JAN ) this is MSVC code. "Compiler agnostic", that is CLANG and GNU version, will come out next.
 
 > Disclaimer: <br/>
 > Immediatly usable in your projects. <br/>
@@ -14,10 +10,24 @@ Currently ( 2020 JAN ) this is MSVC code. "Compiler agnostic", that is CLANG and
 > Use at your own risk.<br/>
 > As we do.
 
-#### Testing
-Is in the separate project called `dbjsqluser`, also part of this Visual Studio 2019 solution.
+
+What we thought of as minimal functionality is implemented. For more we hope you can use this lib as the foundation. 
+Feel free to [contact us](#contact) for the possible help.
+
+Also please stuff the issues tab with bugs; we love to debug.
+
+Currently ( 2021 JAN ) this is MSVC code. 
 
 #### Dependancies
+
+As many other dbj projects this code depends on [MACHINE_WIDE](https://github.com/dbj-data/machine_wide) top level headers and sometimes libraries.
+Please firt clone that repo into the folder `d:\machine_wide` and then 
+add it to your include directories in Visual Studio. 
+The solution in here has it all done for you.
+
+In case you do not have a `D:` drive please do make it with a [SUBST](https://ss64.com/nt/subst.html) command.
+
+
 All the code in here is the `dbj::sql` namespace. This is done, so that it differs from the `sqlite` namespace we have made in here.
 
 This is a heaqder only library. It depends on SQLITE 3, one source file and one header file.
@@ -45,27 +55,36 @@ in case you might preffer it.
 */
 ```
 
-Beside C++ std lib, and sqlite3 itself, no other external code is required.
+#### Testing
+Is in the separate project called `dbjsqluser`, also part of this Visual Studio 2019 solution.
+We use [our own simplified version](https://github.com/dbj-data/ubut) of UTEST and UBENCH. Yes, we include it through "MACHINE_WIDE".
 
 ### Support
 
-Writing such a code is [not trivial](https://stackoverflow.com/questions/1853243/do-you-really-write-exception-safe-code/1853769#1853769). 
-Perhaps we might help you if you need or want to write such a code. 
-Please state your issue on the GitHub, under the "Issues".
+Writing this kind of a code is perhaps [not trivial](https://stackoverflow.com/questions/1853243/do-you-really-write-exception-safe-code/1853769#1853769). 
+We might help you if you need or want to write such a code. 
+Please state your issue on the GitHub, under the "Issues". Or contact us directly.
 
 More documentation is always in the works, if not all published. For immediate professional help please do mail us.
 Please see the contact info on the bottom.
 
-### Exception safety
+### Returns handling policy
 
-C++ STD lib code is throwing exceptions. Code we have in here is never throwing exceptions. To signal the status to the callers
-we use  `dbj_db_status_type`, please see the `dbj_sql_error_concept.h`
+We use MS STL verion of C++ STD lib code NOT throwing C++ exceptions. That means
+`/D_HAS_EXCEPTIONS=0` on the compiler command line. Again already set for you in the project properties.
+
+Code we have in here is not throwing exceptions. 
+To signal the status to the callers
+we use  metastate paradigm and its valstat implementation.
+Please see the [sqlite_valstat.h](sqlite_valstat.h)
+
+WG21 paper explaining it is [P2192](https://github.com/DBJDBJ/metastate).
 
 In case of terminating error, we write it to the stderr and call the `exit()`. 
 
 ---
 
-Built with Microsoft Visual Studio 2019 and C/C++ Optimizing Compiler Version 19.15.26732.1 or better.
+Built with Microsoft Visual Studio 2019 and C/C++ Optimizing Compiler. We update it regularly.
 
 
 ---
@@ -75,6 +94,8 @@ Built with Microsoft Visual Studio 2019 and C/C++ Optimizing Compiler Version 19
 #### Licence -- [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
 ---------------------------------------------------------------------  
+
+<span id="contact"></span>
 
 > Contact
 > 

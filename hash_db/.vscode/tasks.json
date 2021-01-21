@@ -1,0 +1,59 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: cl.exe build active file",
+            "command": "cl.exe",
+            "args": [
+                "/MTd",
+                "/Zi",
+                "/Fe:",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${file}",
+                "../sqlite3/sqlite3.c"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Hit F5 to generate then ammend"
+        },
+        {
+            "type": "cppbuild",
+            "label": "dll RELEASE build",
+            "command": "cl.exe",
+            "args": [
+                "/nologo",
+                "/DNDEBUG",
+                "/MD",
+                "/W2",
+                "/TC",
+                "/O2", "/Ot",
+                "/std:c11",
+                "${workspaceFolder}\\sha1.c",
+                "../sqlite3/sqlite3.c",
+                "-link",
+                "-dll",
+                "-out:${workspaceFolder}\\sha1.dll",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "SQLite extension DLL"
+        }
+    ],
+    "version": "2.0.0"
+}

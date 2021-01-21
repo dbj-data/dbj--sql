@@ -113,7 +113,7 @@ namespace dbj_sql_user
 		// the we do not use sql::db_initor here
 		sql::database db(DICTIONARY_DB_FILE_PATH, status_);
 		// some kind of error has happened
-		if (sql::is_error(status_)) {
+		if (sql::is_error_valstat(status_)) {
 			DBJ_ERR("ERROR Status : %s, While opening the database: %s",
 				status_.status->data(), DICTIONARY_DB_FILE_PATH
 			);
