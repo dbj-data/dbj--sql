@@ -5,13 +5,19 @@
             "label": "C/C++: cl.exe build active file",
             "command": "cl.exe",
             "args": [
+                "/DWINVER=0x0A00",
+                "/D_WIN32_WINNT=0x0A00",
+                /* NOTE: sqlite3 requires utf-8 by default */
+                "/utf-8", 
                 "/Id:/machine_wide",
-                "/MTd",
+                "/MDd",
                 "/Zi",
                 "/Fe:",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${fileDirname}\\bin\\${fileBasenameNoExtension}.exe",
                 "${file}",
-                "../sqlite3/sqlite3.c"
+                "../sqlite3/sqlite3.c",
+                "/link",
+                "/VERSION:0.1"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -23,7 +29,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "Hit F5 to generate then ammend"
+            "detail": "DEBUG BUILD"
         },
         {
             "type": "cppbuild",
