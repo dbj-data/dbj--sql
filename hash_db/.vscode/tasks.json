@@ -1,23 +1,37 @@
 {
     "tasks": [
         {
+            /*
+            1.
+            double check you have started from 
+            [vcvarsall.bat] Environment initialized for: 'x64' !
+            2.
+            not all options are supported
+            https://clang.llvm.org/docs/UsersManual.html#clang-cl
+            */
             "type": "cppbuild",
-            "label": "C/C++: cl.exe build active file",
-            "command": "cl.exe",
+            "label": "build active file",
+            "command": "D:/PROD/programs/Microsoft Visual Studio/2019/Community/VC/Tools/Llvm/x64/bin/clang-cl.exe",
             "args": [
+                "/W3",
+                "/TC", /* Treat all source files as C */
+                /* this does not work: "/std:c11", */
+                /* but this does */ "/clang:-std=c99", 
                 "/DWINVER=0x0A00",
                 "/D_WIN32_WINNT=0x0A00",
                 /* NOTE: sqlite3 requires utf-8 by default */
                 "/utf-8", 
                 "/Id:/machine_wide",
-                "/MDd",
-                "/Zi",
-                "/Fe:",
-                "${fileDirname}\\bin\\${fileBasenameNoExtension}.exe",
+                "/MTd", /* static runtime lib */ 
+                /* "/Zi", include this for debug builds */
                 "${file}",
-                "../sqlite3/sqlite3.c",
+                /* it is #include , "../sqlite3/sqlite3.c", */
+                /* could not make clang-cl understand /Fe: */
+                /* also had to place it as the last arg before /link */
+                "/o${fileDirname}\\bin\\${fileBasenameNoExtension}.exe",
                 "/link",
-                "/VERSION:0.1"
+                "/VERSION:0.2", 
+                "/SUBSYSTEM:CONSOLE" 
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

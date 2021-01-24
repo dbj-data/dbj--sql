@@ -7,6 +7,10 @@
 #endif
 #endif // _DEBUG
 
+#ifdef _MSC_VER
+#define MICROSOFT_WINDOWS_WINBASE_H_DEFINE_INTERLOCKED_CPLUSPLUS_OVERLOADS 0
+#endif
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,8 +19,13 @@
 #include <string.h>
 #include <ubut/ubench.h>
 
-#define SQLITE_THREADSAFE = 0
-#include "..\sqlite3\sqlite3.h"
+#undef _CRT_STRINGIZE_
+#define _CRT_STRINGIZE_(x) #x
+#undef _CRT_STRINGIZE
+#define _CRT_STRINGIZE(x) _CRT_STRINGIZE_(x)
+
+#define SQLITE_THREADSAFE 0
+#include "..\sqlite3\sqlite3.c"
 
 static bool is_sqlite_err(const int specimen_)
 {
@@ -26,12 +35,7 @@ static bool is_sqlite_err(const int specimen_)
 			: true);
 }
 
-enum
-{
-	keys_table_max = 0xFFFF
-};
-
-typedef struct STAT
+typedef struct GLOBALS_STRUCT
 {
 	sqlite3_stmt *insert_stmt;
 	sqlite3_stmt *select_stmt;
@@ -40,24 +44,22 @@ typedef struct STAT
 	/* it depends on the UBENCH how many times some BENCH will be called */
 	size_t inserts_counter;
 	size_t deletions_counter;
-} STAT;
+} GLOBALS_STRUCT;
 
-static STAT stat =
+static GLOBALS_STRUCT globals_ =
 	{.delete_stmt = NULL, .insert_stmt = NULL, .select_stmt = NULL, .last_err_ = SQLITE_OK, 
 	.inserts_counter = 0, .deletions_counter = 0
 	};
 
-// #define sql(database, text) ( stat.last_err_ = sqlite3_exec(database, text, NULL, NULL, NULL), assert(! is_sqlite_err(stat.last_err_)))
-
 #define TRY(EXP_)                                            \
 	do                                                       \
 	{                                                        \
-		stat.last_err_ = (EXP_);                             \
-		if (is_sqlite_err(stat.last_err_))                   \
+		globals_.last_err_ = (EXP_);                             \
+		if (is_sqlite_err(globals_.last_err_))                   \
 		{                                                    \
 			puts("\nline: " _CRT_STRINGIZE(__LINE__));       \
 			puts("sqlite call: " #EXP_ "\nreturned error:"); \
-			puts(sqlite3_errstr(stat.last_err_));            \
+			puts(sqlite3_errstr(globals_.last_err_));            \
 			perror("system ");                               \
 			exit(0);                                         \
 		}                                                    \
@@ -87,28 +89,28 @@ static sqlite3 *init_setup()
 #define select_statement "SELECT value FROM hash_table WHERE key = ?"
 #define delete_statement "DELETE FROM hash_table WHERE key = ?"
 
-	TRY(sqlite3_prepare(dbb_, insert_statement, strlen(insert_statement), &stat.insert_stmt, NULL));
-	TRY(sqlite3_prepare(dbb_, select_statement, strlen(select_statement), &stat.select_stmt, NULL));
-	TRY(sqlite3_prepare(dbb_, delete_statement, strlen(select_statement), &stat.delete_stmt, NULL));
+	TRY(sqlite3_prepare(dbb_, insert_statement, strlen(insert_statement), &globals_.insert_stmt, NULL));
+	TRY(sqlite3_prepare(dbb_, select_statement, strlen(select_statement), &globals_.select_stmt, NULL));
+	TRY(sqlite3_prepare(dbb_, delete_statement, strlen(select_statement), &globals_.delete_stmt, NULL));
 
 #undef insert_statement
 #undef select_statement
 #undef delete_statement
 
-	srand(time(0)); // will need rand()
+	srand((unsigned int)time((time_t*)0)); // will need rand()
 
 	return dbb_;
 }
 
 static void close_and_clean(void)
 {
-	TRY(sqlite3_finalize(stat.insert_stmt));
-	TRY(sqlite3_finalize(stat.select_stmt));
+	TRY(sqlite3_finalize(globals_.insert_stmt));
+	TRY(sqlite3_finalize(globals_.select_stmt));
 
 	(void)sqlite3_close(init_setup());
 
-	printf("\nThere were %zu, inserts", (stat.inserts_counter + stat.deletions_counter));
-	printf("\nThere were %zu, deletions\n", stat.deletions_counter);
+	printf("\nThere were %zu, inserts", (globals_.inserts_counter + globals_.deletions_counter));
+	printf("\nThere were %zu, deletions\n", globals_.deletions_counter);
 }
 
 static void hash_db_populate(sqlite3 *dbb)
@@ -119,14 +121,18 @@ static void hash_db_populate(sqlite3 *dbb)
 	sql(dbb, "BEGIN TRANSACTION;");
 #endif
 	char buffy_[0xF] = {'\0'};
-	int snprintf_rez_ = _snprintf_s(buffy_, 0xF, 0xF, "%zu", stat.inserts_counter + 1000);
+	#ifndef _MSC_VER
+	int snprintf_rez_ = snprintf(buffy_, 0xF, "%zu", globals_.inserts_counter + 1000);
+	#else
+	int snprintf_rez_ = _snprintf_s(buffy_, 0xF, 0xF, "%zu", globals_.inserts_counter + 1000);
+	#endif
 	// must read: https://www.sqlite.org/autoinc.html
 	TRY(sqlite3_bind_text(
-		stat.insert_stmt, 1, buffy_,
+		globals_.insert_stmt, 1, buffy_,
 		snprintf_rez_ + 1 /*strnlen_s(buffy_, 0xF)*/,
 		SQLITE_STATIC));
-	TRY(sqlite3_step(stat.insert_stmt));
-	TRY(sqlite3_reset(stat.insert_stmt));
+	TRY(sqlite3_step(globals_.insert_stmt));
+	TRY(sqlite3_reset(globals_.insert_stmt));
 
 #ifdef INSERTION_IS_TRANSACTION
 	sql(dbb, "COMMIT;");
@@ -134,30 +140,31 @@ static void hash_db_populate(sqlite3 *dbb)
 	/*
     we could do it this way:
 
-	stat.keys_table[ stat.inserts_counter % keys_table_max ] = sqlite3_last_insert_rowid( dbb ) ;
+	globals_.keys_table[ globals_.inserts_counter % keys_table_max ] = sqlite3_last_insert_rowid( dbb ) ;
 	
 	but that is a genuine non inlined call and that is expensive.
 
 	obviously that will be required for hash table interfaces, as that **is** the unique ID
 	managed by sqlite3 for us
 */
-	stat.inserts_counter += 1;
+	globals_.inserts_counter += 1;
 }
 
 // notice we do not need pointer to the sqlite3 here
 static void hash_db_select(void)
 {
 	// generate the key randomly
-	int key = rand() % stat.inserts_counter;
+	int key = rand() % globals_.inserts_counter;
 	// NOTE: ROWID is int but that key above might be not in the table
 	// as sqlite manages the rowid increment upon insertion
 	// it is sometimes not simple +1 increment
 	// hint: that is because of deleted rows
-	TRY(sqlite3_bind_int(stat.select_stmt, 1, key));
-	TRY(sqlite3_step(stat.select_stmt));
+	TRY(sqlite3_bind_int(globals_.select_stmt, 1, key));
+	TRY(sqlite3_step(globals_.select_stmt));
 	// if we have generated the "wrong" key the value_ will be NULL, that's all
-	char *value_ = (char *)sqlite3_column_text(stat.select_stmt, 0);
-	TRY(sqlite3_reset(stat.select_stmt));
+	char *value_ = (char *)sqlite3_column_text(globals_.select_stmt, 0);
+	(void)value_ ;
+	TRY(sqlite3_reset(globals_.select_stmt));
 }
 
 //
@@ -165,7 +172,7 @@ static void hash_db_delete(sqlite3 *dbb)
 {
 
 	// start from the end
-	int key = stat.inserts_counter, rows_modified = 0;
+	int key = globals_.inserts_counter, rows_modified = 0;
 
 	rows_modified = 0;
 	char buf[0xFF] = {0};
@@ -175,8 +182,8 @@ static void hash_db_delete(sqlite3 *dbb)
 
 	if (rows_modified > 0)
 	{
-		stat.inserts_counter -= 1;
-		stat.deletions_counter += 1;
+		globals_.inserts_counter -= 1;
+		globals_.deletions_counter += 1;
 	}
 }
 
@@ -207,15 +214,15 @@ UBENCH(dbj_sqlite_hash, slow_populate)
 	int key = rand() % TABLESIZE;
 	snprintf(sql_insert, 0xFF, "INSERT INTO hash_table VALUES(%d,%d)", key, key + 100);
 	sql(dbb, sql_insert);
-	stat.keys_table[i] = key;
+	globals_.keys_table[i] = key;
 }
 #endif // 0
 
-UBENCH_STATE; // note there is no ()!
+UBENCH_STATE ; // note there is no "()" !
 
 int main(int argc, const char *const argv[])
 {
-	sqlite3 *dbb_ = init_setup();
+	(void)init_setup();
 	int retval = ubench_main(argc, argv);
 	close_and_clean();
 	return retval;
