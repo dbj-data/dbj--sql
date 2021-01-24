@@ -24,8 +24,8 @@
 #undef _CRT_STRINGIZE
 #define _CRT_STRINGIZE(x) _CRT_STRINGIZE_(x)
 
-// using the lib and dll from the ./bin folder
-#include "..\sqlite3\sqlite3.h"
+// 
+#include <sqlite3\sqlite3.h>
 
 static bool is_sqlite_err(const int specimen_)
 {

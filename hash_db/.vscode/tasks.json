@@ -16,7 +16,7 @@
                 "/W3",
                 "/TC", /* Treat all source files as C */
                 /* this does not work: "/std:c11", */
-                /* but this does */ "/clang:-std=c99", 
+                /* but this does */ "/clang:-std=c11", 
                 "/DWINVER=0x0A00",
                 "/D_WIN32_WINNT=0x0A00",
                 /* NOTE: sqlite3 requires utf-8 by default */
@@ -25,14 +25,15 @@
                 "/MTd", /* static runtime lib */ 
                 /* "/Zi", include this for debug builds */
                 "${file}",
-                "${fileDirname}\\bin\\sqlite3.lib",
+                /* "${fileDirname}\\bin\\ */ "sqlite3.lib",
                 /* it is #include , "../sqlite3/sqlite3.c", */
                 /* could not make clang-cl understand /Fe: */
                 /* also had to place it as the last arg before /link */
                 "/o${fileDirname}\\bin\\${fileBasenameNoExtension}.exe",
                 "/link",
                 "/VERSION:0.2", 
-                "/SUBSYSTEM:CONSOLE" 
+                "/SUBSYSTEM:CONSOLE" ,
+                "/LIBPATH:d:/machine_wide/sqlite3/bin"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
