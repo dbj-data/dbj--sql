@@ -25,6 +25,7 @@
                 "/MTd", /* static runtime lib */ 
                 /* "/Zi", include this for debug builds */
                 "${file}",
+                "${fileDirname}\\bin\\sqlite3.lib",
                 /* it is #include , "../sqlite3/sqlite3.c", */
                 /* could not make clang-cl understand /Fe: */
                 /* also had to place it as the last arg before /link */
