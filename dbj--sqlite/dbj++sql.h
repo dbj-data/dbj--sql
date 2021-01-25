@@ -28,10 +28,10 @@ namespace dbj::sql
 	using namespace ::std::literals::string_view_literals;
 
 	enum semver {
-		major = 2, minor = 9, patch = 0
+		major = 3, minor = 0, patch = 0
 	};
 
-	constexpr inline auto version = "2.9.0";
+	constexpr inline auto version = "3.0.0";
 	constexpr inline auto product = "DBJ SQLITE -- (c) 2020/2021 by dbj@dbj.org -- https://dbj.org/license_dbj";
 
 	using uchar = unsigned char;
@@ -284,10 +284,11 @@ namespace dbj::sql
 
 				if (column_text == nullptr)
 					return buffer_type::make("NULL");
-
-				const size_t  column_text_sze_ = sqlite::sqlite3_column_bytes(statement_, col_index_);
-				DBJ_ASSERT(column_text_sze_ > 0);
-
+#ifdef _DEBUG
+				DBJ_ASSERT(sqlite::sqlite3_column_bytes(statement_, col_index_) > 0);
+#else
+				(void)sqlite::sqlite3_column_bytes(statement_, col_index_);
+#endif
 				return buffer_type::make((const char*)column_text);
 				// NOT relaying on the assumption sqlite3 zero terminates the column_text result?
 				//buffer_type buffy{ column_text , column_text + column_text_sze_ };
@@ -615,8 +616,11 @@ namespace dbj::sql
 				// sqlite3 returns NULL pointer if cell value is SQL NULL, ditto
 				if (text == nullptr)	return buffer_type::make("NULL");
 
-				size_t text_length = sqlite::sqlite3_value_bytes(argv[col_index_]);
-				DBJ_ASSERT(text_length > 0);
+#ifdef _DEBUG
+				DBJ_ASSERT(sqlite::sqlite3_value_bytes(argv[col_index_]) > 0);
+#else
+				sqlite::sqlite3_value_bytes(argv[col_index_]);
+#endif
 				return  buffer_type::make(text);
 			}
 

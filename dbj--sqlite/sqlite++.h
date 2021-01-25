@@ -45,15 +45,15 @@ dbj.org -- 2019-01-26 -- created
 
 wrap the sqlite into the namespace
 
-obviously does *not* hide the #define's 
+obviously does *not* hide the #define's
 for example SQLITE_OK
-so please learn what are they 
+so please learn what are they
 in sqlite3 documentation
 
 2018-11-03	dbj@dbj.org
 */
 #ifdef __cplusplus
-namespace sqlite{
+namespace sqlite {
 #endif
 
 	/*
@@ -62,7 +62,7 @@ https://www.sqlite.org/compile.html#enable_column_metadata
 */
 #define SQLITE_ENABLE_COLUMN_METADATA
 
-#include "../sqlite3/sqlite3.h"
+#include <sqlite3/sqlite3.h>
 
 #ifdef __cplusplus
 }
@@ -70,7 +70,10 @@ https://www.sqlite.org/compile.html#enable_column_metadata
 
 
 /*
-final app depends on sqlite3.c (x64) being available
+final app depends on sqlite3.lib (x64) being available
 and made part of the build
 */
+
+#pragma comment(lib, "sqlite3.lib") 
+
 #endif // !DBJ_SQLITE_INC

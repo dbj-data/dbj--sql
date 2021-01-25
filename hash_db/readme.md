@@ -1,8 +1,9 @@
 
-## Using SQLite for Hash Table implementation
+# Using SQLite for Hash Table implementation
 
 Specificaly for implementing the storage of unique strings.
 
+## SQLite Extension Sample
 ### Encrypt the whole database or schema 
 dbhash.c is from the SQLite dev tree : https://www.sqlite.org/src/file?name=tool/dbhash.c
 
@@ -15,13 +16,14 @@ File ext/misc/sha1.c is from the [latest check-in](https://www.sqlite.org/src/fi
 
 ### Building
 
-I find it most feasile to build one file C/C++ projects like these in here, using VSCode.
-Thus this is not part of the VS solution.
+I find it most feasible to build one file C/C++ projects like these in here, using VSCode.
+Thus this folder is not part of this VS solution.
 
 - To build make sure sqlite3.lib is on the path.
 - To run make sure sqlite3.dll is on the path.
 - on our builds DBJ_SQLITE3 env var points to where they both are
 - it is also added to the path
+- study `.vscode/tasks.json` for further building details
 
 
 | Contact | &nbsp;

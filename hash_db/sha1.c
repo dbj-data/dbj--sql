@@ -25,8 +25,8 @@
 */
 #ifndef _DEBUG
 #ifndef NDEBUG
- #define NDEBUG
- #endif
+#define NDEBUG
+#endif
 #endif // _DEBUG
 #include <assert.h>
 
@@ -41,7 +41,7 @@
 
 /*
 -------------------------------------------------------------------------------
-set the WINVER and _WIN32_WINNT macros to the oldest supported platform 
+set the WINVER and _WIN32_WINNT macros to the oldest supported platform
 which in this case is windows 10
 */
 
@@ -58,12 +58,12 @@ which in this case is windows 10
 
 // END DBJ ADDED
 #endif // 0
-#include "../sqlite3/sqlite3ext.h"
+
+#include <sqlite3/sqlite3ext.h>
 SQLITE_EXTENSION_INIT1
 
-/******************************************************************************
-** The Hash Engine
-*/
+#pragma region The Hash Engine
+
 /* Context for the SHA1 hash */
 typedef struct SHA1Context SHA1Context;
 struct SHA1Context {
@@ -256,8 +256,8 @@ static void hash_finish(
 	}
 	zOut[i * 2] = 0;
 }
-/* End of the hashing logic
-*****************************************************************************/
+
+#pragma endregion End of the hashing logic
 
 /*
 ** Implementation of the sha1(X) function.
@@ -278,7 +278,7 @@ static void sha1Func(
 	int nByte = sqlite3_value_bytes(argv[0]);
 	char zOut[44];
 
-	assert(argc == 1);
+	ALWAYS(argc == 1);
 
 	if (eType == SQLITE_NULL) return;
 	hash_init(&cx);

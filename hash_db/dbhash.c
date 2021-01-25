@@ -35,7 +35,7 @@ so ...
 #include <ctype.h>
 #include <string.h>
 #include <assert.h>
-#include "../sqlite3/sqlite3.h"
+#include <sqlite3/sqlite3.h>
 
 /* Context for the SHA1 hash */
 typedef struct SHA1Context SHA1Context;
