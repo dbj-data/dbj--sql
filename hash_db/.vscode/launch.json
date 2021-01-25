@@ -14,7 +14,7 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": true,
-            "preLaunchTask": "CLANG-CL DEBUG BUILD"
+            "preLaunchTask": "build active file"
         }
     ]
 }

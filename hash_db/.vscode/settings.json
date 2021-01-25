@@ -3,19 +3,20 @@
    usage from settings: ${config:dbj.<the key name>}
   */
   "dbj": {
-    "compiler" : "D:\\PROD\\programs\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\Llvm\\x64\\bin\\clang-cl.exe",
+    "clang-cl" : "\"D:\\PROD\\programs\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\Llvm\\x64\\bin\\clang-cl.exe\"",
+    "cl" : "cl.exe",
     /* 
     /TC means blanket switch for the whole project
     for clang-cl use /clang:-std=c11 -- but do not mix C and CPP files in the same build 
     for cl use /std:c11
     */
-    "common_args_release": "/nologo  /DNDEBUG  /MD  /W2  /TC  /O2  /Ot  /utf-8  /Id:/machine_wide",
-    "common_args_debug": "/Zi /nologo /MDd /W2 /TC /Ot /utf-8 /MTd /Id:/machine_wide",
+    "common_args_release": "/DNDEBUG  /MD  /W2  /TC  /O2  /Ot  /utf-8  /Id:/machine_wide",
+    "common_args_debug": "/Zi /MDd /W2 /TC /utf-8 /MTd /Id:/machine_wide",
     /* clang-cl does not need this as it hides the cruft "somewhere" 
       if using it must have it before build starts
     */
-    "intermediate_folder": " /Fointermediate\\ ",
-    "exe_name": "/Fe${fileDirname}\\bin\\${fileBasenameNoExtension}.exe ",
+    "cruft": "/Focruft\\ ",
+    "exe_name": "/Febin\\${fileBasenameNoExtension}.exe ",
     /* the current active file and sqlite lib*/ 
     "sqlite3_lib" : "sqlite3.lib"
   }

@@ -94,9 +94,9 @@ static sqlite3* init_setup()
 #define select_statement "SELECT value FROM hash_table WHERE key = ?"
 #define delete_statement "DELETE FROM hash_table WHERE key = ?"
 
-	TRY(sqlite3_prepare(dbb_, insert_statement, strlen(insert_statement), &globals_.insert_stmt, NULL));
-	TRY(sqlite3_prepare(dbb_, select_statement, strlen(select_statement), &globals_.select_stmt, NULL));
-	TRY(sqlite3_prepare(dbb_, delete_statement, strlen(select_statement), &globals_.delete_stmt, NULL));
+	TRY(sqlite3_prepare(dbb_, insert_statement, sizeof(insert_statement), &globals_.insert_stmt, NULL));
+	TRY(sqlite3_prepare(dbb_, select_statement, sizeof(select_statement), &globals_.select_stmt, NULL));
+	TRY(sqlite3_prepare(dbb_, delete_statement, sizeof(select_statement), &globals_.delete_stmt, NULL));
 
 #undef insert_statement
 #undef select_statement
@@ -177,7 +177,7 @@ static void hash_db_delete(sqlite3* dbb)
 {
 
 	// start from the end
-	int key = globals_.inserts_counter, rows_modified = 0;
+	int key = (int)globals_.inserts_counter, rows_modified = 0;
 
 	rows_modified = 0;
 	char buf[0xFF] = { 0 };
