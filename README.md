@@ -23,28 +23,49 @@ The environment
   - SQLite 3 is part of that too
 - For SQLite databases management we recommend [SQLite Studio](https://youtu.be/dugUk893gxQ) 
 - Please install Visual Studio 2019 with Clang
-- Please install VS Code with the C/C++ Extension
-- Open VStudio 64 bit command prompt, then open this folder in VS Code
-  - But why VS Code, why?
-    - It is better for single file based, code study.
-    - it makes build properties very easy to change compared to Visual Studio GUI
-    - Warning: VS Code is not made for C/C++ projects **NOT** using CMake
-    - We do not use CMake and it has taken us days to make this work just by using VSCode
-      - We will document that part separately
-- There are three C files
-  -  each is best experienced by following it through the VS Code debugger
+- There are three VStudio projects in this folder
+  -  each is best experienced by following it through the VStudio debugger
 
 ## What is what 
 
 
 | File  | Description
 |-------|--------------
-| hash_db.c | Benchmarking. This is from where the actual original work has started. 
-| dbhash.c | Hahshing the whole database. Taken from SQLite dev tree.
-| sha1.c | SQLite "extension". `sha1` hash function. Taken from SQLite dev tree.
+| benchmarking.c | This is from where the actual original work has started. Study that one first.
+| dbhash.c | Sampler. Hahshing the whole database. Taken from SQLite dev tree.
+| sha1.c | SQLite "extension" sampler. `sha1` hash function. Taken from SQLite dev tree.
 
 
 ## On The Road
+
+> aka "the Roadmap"
+
+For full functionality one needs an "handle" (just a "number") to interface with hash tables feasibly. Unlike pointers, handles can be checked if they are valid. Handle is implemented as a result of the hash function
+
+```cpp
+// general unique values HT storing algorithm
+auto handle = hash_function(value_to_store) ;
+if ( ! already_stored(handle) )
+      store(value_to_store) ;
+//to the caller
+return handle;
+// there are other big issues arround that 
+// we will talk later
+```
+
+User/caller is given that handle, not some pointer.
+
+General aim is to develop SQLite extension that will aid creating hashtables, which basicaly means several hashing functions:
+
+- [Paul Hsieh](https://gist.github.com/CedricGuillemet/4978020)
+- [Jenkins](https://burtleburtle.net/bob/c/lookup3.c)
+- [there are others](https://en.wikipedia.org/wiki/List_of_hash_functions#Non-cryptographic_hash_functions) although  it is a moot point why would they be used
+
+### So far
+
+So good. SQLite HT (in memory) seems rather fast. hash functions are not used, yet. Keep in mind performance is not the only sign of quality. There is also a question of space aka size.
+
+Even without testing one can be reasonably sure SQLite supported HT implementation can store gigabytes of strings or general data. Persistent and in a very safe manner too. Put a "micro service" in front of that and "you can fly".
 
 This is far from finished and documented. Stay tuned.
 

@@ -123,7 +123,7 @@ static void close_and_clean(void)
 
 static void hash_db_populate(sqlite3* dbb)
 {
-	// this works with ot without BEGIN/COMMIT
+	// this works with or without BEGIN/COMMIT
 	// without is only slightly faster
 #ifdef INSERTION_IS_TRANSACTION
 	sql(dbb, "BEGIN TRANSACTION;");
@@ -159,6 +159,7 @@ static void hash_db_populate(sqlite3* dbb)
 }
 
 // notice we do not need pointer to the sqlite3 here
+// we have prepared statement
 static void hash_db_select(void)
 {
 	// generate the key randomly
