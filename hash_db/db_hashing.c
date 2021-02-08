@@ -1,3 +1,7 @@
+/*'
+/link /LIBAPTH must be properly set
+*/
+#pragma comment(lib,"sqlite3.lib") 
 // https://www.sqlite.org/src/file?name=tool/dbhash.c
 // https://sqlite.org/forum/forumpost/d90adfbb0a
 /*
@@ -458,12 +462,12 @@ int main(int argc, char** argv) {
 			fprintf(stderr, "cannot open database file '%s'\n", zDb);
 			continue;
 		}
-		rc = sqlite3_exec(g.db, "SELECT * FROM " SQLITE_SCHEMA_NAME , 0, 0, &zErrMsg);
+		rc = sqlite3_exec(g.db, "SELECT * FROM " SQLITE_SCHEMA_NAME, 0, 0, &zErrMsg);
 		if (rc || zErrMsg) {
 			sqlite3_close(g.db);
 			g.db = 0;
 			fprintf(stderr, "'%s' is not a valid SQLite database\nError message: %s\n"
-			, zDb, ( zErrMsg ? zErrMsg : "unknown error" ) );
+				, zDb, (zErrMsg ? zErrMsg : "unknown error"));
 			continue;
 		}
 

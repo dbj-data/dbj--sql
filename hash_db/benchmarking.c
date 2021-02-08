@@ -1,6 +1,9 @@
 /*'
-* transformed from:  https://www.freebasic.net/forum/viewtopic.php?select_statement=14804
+/link /LIBAPTH must be properly set
 */
+
+#pragma comment(lib,"sqlite3.lib") 
+
 #ifndef _DEBUG
 #ifndef NDEBUG
 #define NDEBUG
@@ -77,11 +80,11 @@ static sqlite3* init_setup()
 	sqlite3_config(SQLITE_CONFIG_SINGLETHREAD);
 	// on Windows + using cl or clang-cl
 	// be sure /utf-8 switch is in use!
-			static const int openFlags =
-			SQLITE_OPEN_READWRITE     /* Read/write so hot journals can recover */
-			/* | SQLITE_OPEN_URI */
-			;
-	TRY( sqlite3_open_v2(":memory:",  &dbb_, openFlags, 0));
+	static const int openFlags =
+		SQLITE_OPEN_READWRITE     /* Read/write so hot journals can recover */
+		/* | SQLITE_OPEN_URI */
+		;
+	TRY(sqlite3_open_v2(":memory:", &dbb_, openFlags, 0));
 
 	sql(dbb_, "BEGIN TRANSACTION;");
 	sql(dbb_, "CREATE TABLE hash_table(key INTEGER PRIMARY KEY AUTOINCREMENT, value TEXT);");
@@ -208,7 +211,8 @@ UBENCH(dbj_sqlite_hash, delete)
 }
 
 // using the sqlite3.exec is approx 7 times slower
-// vs the  hash_db_create_populate();
+// vs using the prepared statement as in the
+// abovehash_db_create_populate();
 #if 0
 UBENCH(dbj_sqlite_hash, slow_populate)
 {

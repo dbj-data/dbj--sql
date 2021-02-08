@@ -6,19 +6,6 @@
 #include <string_view>
 #include <dbj/dbj_buffer.h>
 
-// UTEST depeneds on simplelog
-// server side there is no console thus we need that here too
-#include <simplelog/dbj_simple_log_host.h>
-
-#undef DBJ_PRINT
-#define DBJ_PRINT(...) dbj_log_info(__VA_ARGS__)
-
-#undef DBJ_WARN
-#define DBJ_WARN(...) dbj_log_warn(__VA_ARGS__)
-
-#undef DBJ_ERR
-#define DBJ_ERR(...) dbj_log_error(__VA_ARGS__)
-
 #include "sqlite_valstat.h"
 
 namespace dbj::sql
@@ -799,10 +786,10 @@ namespace dbj::sql
 		{
 			auto cell_name = cell.name(j_);
 			auto cell_value = cell.to_text(j_, true);
-			DBJ_PRINT("{ '%s' : '%s' }", cell_name, (cell_value ? (*cell_value).data() : "???"));
+			DBJ_SQL_LOG("{ '%s' : '%s' }", cell_name, (cell_value ? (*cell_value).data() : "???"));
 		};
 
-		DBJ_PRINT("[%6zu] ", row_id);
+		DBJ_SQL_LOG("[%6zu] ", row_id);
 		for (int k = 0; k < number_of_columns; k++)	print_cell(k);
 
 		return SQLITE_OK; // mandatory

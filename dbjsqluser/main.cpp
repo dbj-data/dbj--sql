@@ -1,10 +1,19 @@
 /*
 (c) 2019 by dbj@dbj.org -- CC BY-SA 4.0 -- https://creativecommons.org/licenses/by-sa/4.0/
 */
+
+/*'
+/link /LIBAPTH must be properly set
+*/
+
+#pragma comment(lib,"sqlite3.lib") 
+
 #include "common.h"
 
+#ifdef DBJ_UBUT_SIMPLE_LOG
 // dbj_simple_log requires this in one place
 static int dbj_simple_log_setup_ = (DBJ_LOG_DEFAULT_WITH_CONSOLE);
+#endif
 
 
 #include "build_time_stamp.inc"

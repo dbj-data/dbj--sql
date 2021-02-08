@@ -133,7 +133,7 @@ namespace dbj_sql_user
 	{
 		auto [database, status] = demo_db();
 		if (!database) {
-			DBJ_PRINT("%s", status->data());
+			DBJ_SQL_LOG("%s", status->data());
 			return; // error
 		}
 		sql::print_on_sql_error(test_wrong_insert(*database));

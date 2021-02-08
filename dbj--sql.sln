@@ -5,25 +5,50 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dbjsqluser", "dbjsqluser.vcxproj", "{C0B416AE-9F00-4887-A647-A6B65C95A635}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lib-dbj-simplelog-clang-no-cppx", "D:\MACHINE_WIDE\simplelog\build\dbj-simplelog-clang-no-cppx\dbj-simplelog-clang-no-cppx.vcxproj", "{ED08B54B-56D4-4073-B6A9-AFE2C756368E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "thash_db_benchmarking_", "hash_db\thash_db.vcxproj", "{E768B5FB-1948-4537-AB75-E2B0512772D0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sha1", "hash_db\sha1.vcxproj", "{CE493F43-F873-4EB8-AB7F-276B1EFA5B7A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "db_hashing_tool_", "hash_db\db_hashing_tool_.vcxproj", "{06ECF511-3985-4E56-941D-49E0BBAADF94}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		D:\MACHINE_WIDE\simplelog\build\code-dbj-simplelog.vcxitems*{ed08b54b-56d4-4073-b6a9-afe2c756368e}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C0B416AE-9F00-4887-A647-A6B65C95A635}.Debug|x64.ActiveCfg = Debug|x64
 		{C0B416AE-9F00-4887-A647-A6B65C95A635}.Debug|x64.Build.0 = Debug|x64
+		{C0B416AE-9F00-4887-A647-A6B65C95A635}.Debug|x86.ActiveCfg = Debug|x64
 		{C0B416AE-9F00-4887-A647-A6B65C95A635}.Release|x64.ActiveCfg = Release|x64
 		{C0B416AE-9F00-4887-A647-A6B65C95A635}.Release|x64.Build.0 = Release|x64
-		{ED08B54B-56D4-4073-B6A9-AFE2C756368E}.Debug|x64.ActiveCfg = Debug|x64
-		{ED08B54B-56D4-4073-B6A9-AFE2C756368E}.Debug|x64.Build.0 = Debug|x64
-		{ED08B54B-56D4-4073-B6A9-AFE2C756368E}.Release|x64.ActiveCfg = Release|x64
-		{ED08B54B-56D4-4073-B6A9-AFE2C756368E}.Release|x64.Build.0 = Release|x64
+		{C0B416AE-9F00-4887-A647-A6B65C95A635}.Release|x86.ActiveCfg = Release|x64
+		{E768B5FB-1948-4537-AB75-E2B0512772D0}.Debug|x64.ActiveCfg = Debug|x64
+		{E768B5FB-1948-4537-AB75-E2B0512772D0}.Debug|x64.Build.0 = Debug|x64
+		{E768B5FB-1948-4537-AB75-E2B0512772D0}.Debug|x86.ActiveCfg = Debug|Win32
+		{E768B5FB-1948-4537-AB75-E2B0512772D0}.Debug|x86.Build.0 = Debug|Win32
+		{E768B5FB-1948-4537-AB75-E2B0512772D0}.Release|x64.ActiveCfg = Release|x64
+		{E768B5FB-1948-4537-AB75-E2B0512772D0}.Release|x64.Build.0 = Release|x64
+		{E768B5FB-1948-4537-AB75-E2B0512772D0}.Release|x86.ActiveCfg = Release|Win32
+		{E768B5FB-1948-4537-AB75-E2B0512772D0}.Release|x86.Build.0 = Release|Win32
+		{CE493F43-F873-4EB8-AB7F-276B1EFA5B7A}.Debug|x64.ActiveCfg = Debug|x64
+		{CE493F43-F873-4EB8-AB7F-276B1EFA5B7A}.Debug|x64.Build.0 = Debug|x64
+		{CE493F43-F873-4EB8-AB7F-276B1EFA5B7A}.Debug|x86.ActiveCfg = Debug|Win32
+		{CE493F43-F873-4EB8-AB7F-276B1EFA5B7A}.Debug|x86.Build.0 = Debug|Win32
+		{CE493F43-F873-4EB8-AB7F-276B1EFA5B7A}.Release|x64.ActiveCfg = Release|x64
+		{CE493F43-F873-4EB8-AB7F-276B1EFA5B7A}.Release|x64.Build.0 = Release|x64
+		{CE493F43-F873-4EB8-AB7F-276B1EFA5B7A}.Release|x86.ActiveCfg = Release|Win32
+		{CE493F43-F873-4EB8-AB7F-276B1EFA5B7A}.Release|x86.Build.0 = Release|Win32
+		{06ECF511-3985-4E56-941D-49E0BBAADF94}.Debug|x64.ActiveCfg = Debug|x64
+		{06ECF511-3985-4E56-941D-49E0BBAADF94}.Debug|x64.Build.0 = Debug|x64
+		{06ECF511-3985-4E56-941D-49E0BBAADF94}.Debug|x86.ActiveCfg = Debug|Win32
+		{06ECF511-3985-4E56-941D-49E0BBAADF94}.Debug|x86.Build.0 = Debug|Win32
+		{06ECF511-3985-4E56-941D-49E0BBAADF94}.Release|x64.ActiveCfg = Release|x64
+		{06ECF511-3985-4E56-941D-49E0BBAADF94}.Release|x64.Build.0 = Release|x64
+		{06ECF511-3985-4E56-941D-49E0BBAADF94}.Release|x86.ActiveCfg = Release|Win32
+		{06ECF511-3985-4E56-941D-49E0BBAADF94}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

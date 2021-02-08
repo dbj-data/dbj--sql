@@ -29,35 +29,8 @@
 #endif
 #endif // _DEBUG
 #include <assert.h>
-
-
-#if 0
-// BEGIN DBJ ADDED
-#ifdef __STDC_ALLOC_LIB__
-#define __STDC_WANT_LIB_EXT2__ 1
-#else
-#define _POSIX_C_SOURCE 200809L
-#endif
-
-/*
--------------------------------------------------------------------------------
-set the WINVER and _WIN32_WINNT macros to the oldest supported platform
-which in this case is windows 10
-*/
-
-#undef WINVER
-#define WINVER 0x0A00
-
-#undef _WIN32_WINNT
-#define _WIN32_WINNT 0x0A00
-
-#define NOMINMAX
-#define STRICT 1
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-// END DBJ ADDED
-#endif // 0
+#include <stdlib.h>
+#include <string.h>
 
 #include <sqlite3/sqlite3ext.h>
 SQLITE_EXTENSION_INIT1
@@ -278,7 +251,7 @@ static void sha1Func(
 	int nByte = sqlite3_value_bytes(argv[0]);
 	char zOut[44];
 
-	ALWAYS(argc == 1);
+	assert(argc == 1);
 
 	if (eType == SQLITE_NULL) return;
 	hash_init(&cx);

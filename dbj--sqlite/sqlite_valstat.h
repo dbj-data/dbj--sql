@@ -149,7 +149,7 @@ namespace dbj::sql
 	{
 		if (S_.status)
 		{
-			DBJ_PRINT("ERROR Status %s ", S_.status->data());
+			DBJ_SQL_LOG("ERROR Status %s ", S_.status->data());
 		}
 	};
 

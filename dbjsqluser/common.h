@@ -39,6 +39,18 @@
 #endif //  DBJ_CPLUSPLUS
 
 #include "../dbj--sqlite/dbj++sql.h"
+
+#define DBJ_SQL_UTEST
 #include <ubut/utest.h>
+
+#undef DBJ_PRINT
+#define DBJ_PRINT UBUT_INFO
+
+#undef DBJ_ERR
+#define DBJ_ERR UBUT_ERROR
+
+#undef DBJ_WARN
+#define DBJ_WARN UBUT_WARN
+
 
 #endif // !DBJ_COMMON_INC_

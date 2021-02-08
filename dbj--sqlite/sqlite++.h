@@ -39,6 +39,11 @@
 #error DBJ--SQL, SQLITE lib and dll, are built for x64 applications.
 #endif
 
+#ifdef DBJ_SIMPLE_LOG
+#error not yet a separate library conditionaly using simple log
+#else
+#define DBJ_SQL_LOG(...) fprintf(stderr, __VA_ARGS__)
+#endif
 
 /*
 dbj.org -- 2019-01-26 -- created
