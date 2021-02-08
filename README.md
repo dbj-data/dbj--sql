@@ -63,7 +63,7 @@ General aim is to develop SQLite extension that will aid creating hashtables, wh
 
 ### So far
 
-So good. SQLite HT (in memory) seems rather fast. hash functions are not used, yet. Keep in mind performance is not the only sign of quality. There is also a question of space aka size.
+So good. SQLite HT (in memory) seems rather fast (hash functions are not used, yet). Keep in mind performance is not the only sign of quality. There is also a question of space aka size.
 
 Even without testing one can be reasonably sure SQLite supported HT implementation can store gigabytes of strings or general data. Persistent and in a very safe manner too. Put a "micro service" in front of that and "you can fly".
 
