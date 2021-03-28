@@ -5,7 +5,7 @@
 
 #### How to install
 
-1. Use your favorite SQLITE management App
+1. Use your favourite SQLITE management App
     - We use [SQLITE Sutdio](https://github.com/pawelsalawa/sqlitestudio)
     - From the csv file create the SQLITE DB file 
     - Place it into some local folder of yours
@@ -16,7 +16,7 @@
 
 -------------------------------------
 
-#### Copyright 2017,2018,2019,2020 by [dbj.systems uk ltd](https://dbj.systems/).
+#### Copyright 2017 - 2021 by [dbj.systems uk ltd](https://dbj.systems/).
 
 #### Licence -- [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 

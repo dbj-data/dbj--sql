@@ -6,16 +6,14 @@
 
 ---------------------------------------------------------------------  
 
-## Why are you here?
+## Why are we here?
 
-The idea in here is to use the SQLite in memory database for Hash Tables implementations. If interested you are very welcome.
+The idea is to use the SQLite in memory database for Hash Tables implementations. If interested you are very welcome.
 
 This folder is ISO C code only.
 
 
-## Dive in
-
-The environment
+## Operational Environment
 
 - Windows 10 Pro x64 
 - Clone the [MACHINE_WIDE](https://github.com/dbj-data/machine_wide) to your D: drive.
@@ -24,19 +22,19 @@ The environment
 - For SQLite databases management we recommend [SQLite Studio](https://youtu.be/dugUk893gxQ) 
 - Please install Visual Studio 2019 with Clang
 - There are three VStudio projects in this folder
-  -  each is best experienced by following it through the VStudio debugger
+  -  each is best experienced by following it through the Visual Studio debugger
 
 ## What is what 
 
 
 | File  | Description
 |-------|--------------
-| benchmarking.c | This is from where the actual original work has started. Study that one first.
-| dbhash.c | Sampler. Hahshing the whole database. Taken from SQLite dev tree.
-| sha1.c | SQLite "extension" sampler. `sha1` hash function. Taken from SQLite dev tree.
+| `benchmarking.c` | This is from where the actual original work has started. Study that one first.
+| `dbhash.c` | Sampler. Hashing the whole database. Taken from SQLite dev tree.
+| `sha1.c` | SQLite "extension" sampler. `sha1` hash function. Taken from SQLite dev tree.
 
 
-## On The Road
+## On The Road (not again)
 
 > aka "the Roadmap"
 
@@ -49,23 +47,23 @@ if ( ! already_stored(handle) )
       store(value_to_store) ;
 //to the caller
 return handle;
-// there are other big issues arround that 
+// there are other big issues around that 
 // we will talk later
 ```
 
-User/caller is given that handle, not some pointer.
+User/caller is given that handle, **not** some pointer. Repeat: Handlers not pointers.
 
-General aim is to develop SQLite extension that will aid creating hashtables, which basicaly means several hashing functions:
+General aim is to develop SQLite extension that will aid creating hash tables, which basically means several hashing functions:
 
 - [Paul Hsieh](https://gist.github.com/CedricGuillemet/4978020)
 - [Jenkins](https://burtleburtle.net/bob/c/lookup3.c)
-- [there are others](https://en.wikipedia.org/wiki/List_of_hash_functions#Non-cryptographic_hash_functions) although  it is a moot point why would they be used
+- [there are others](https://en.wikipedia.org/wiki/List_of_hash_functions#Non-cryptographic_hash_functions) although  it is a moot point why would "the others" be used
 
 ### So far
 
 So good. SQLite HT (in memory) seems rather fast (hash functions are not used, yet). Keep in mind performance is not the only sign of quality. There is also a question of space aka size.
 
-Even without testing one can be reasonably sure SQLite supported HT implementation can store gigabytes of strings or general data. Persistent and in a very safe manner too. Put a "micro service" in front of that and "you can fly".
+Even without testing one can be reasonably sure SQLite DB file (not `:memory:`) supported HT implementation can store gigabytes of strings or some general data. Persistent and in a very safe manner too. Put a "micro service" in front of that and "you can fly".
 
 This is far from finished and documented. Stay tuned.
 
